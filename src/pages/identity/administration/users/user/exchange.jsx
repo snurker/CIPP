@@ -10,7 +10,7 @@ import tabOptions from "./tabOptions";
 import { CippTimeAgo } from "../../../../../components/CippComponents/CippTimeAgo";
 import { CippCopyToClipBoard } from "../../../../../components/CippComponents/CippCopyToClipboard";
 import { Box, Stack } from "@mui/system";
-import Grid from "@mui/material/Grid2";
+import { Grid } from "@mui/system";
 import { CippBannerListCard } from "../../../../../components/CippCards/CippBannerListCard";
 import { CippExchangeInfoCard } from "../../../../../components/CippCards/CippExchangeInfoCard";
 import { useEffect, useState } from "react";
@@ -18,7 +18,7 @@ import CippExchangeSettingsForm from "../../../../../components/CippFormPages/Ci
 import { useForm } from "react-hook-form";
 import { Alert, Button, Collapse, CircularProgress, Typography } from "@mui/material";
 import { CippApiResults } from "../../../../../components/CippComponents/CippApiResults";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { Block, PlayArrow, DeleteForever } from "@mui/icons-material";
 import { CippPropertyListCard } from "../../../../../components/CippCards/CippPropertyListCard";
 import { getCippTranslation } from "../../../../../utils/get-cipp-translation";
 import { getCippFormatting } from "../../../../../utils/get-cipp-formatting";
@@ -189,9 +189,39 @@ const Page = () => {
 
   const mailboxRuleActions = [
     {
+      label: "Enable Mailbox Rule",
+      type: "POST",
+      icon: <PlayArrow />,
+      url: "/api/ExecSetMailboxRule",
+      data: {
+        ruleId: "Identity",
+        userPrincipalName: graphUserRequest.data?.[0]?.userPrincipalName,
+        ruleName: "Name",
+        Enable: true,
+      },
+      condition: (row) => !row.Enabled,
+      confirmText: "Are you sure you want to enable this mailbox rule?",
+      multiPost: false,
+    },
+    {
+      label: "Disable Mailbox Rule",
+      type: "POST",
+      icon: <Block />,
+      url: "/api/ExecSetMailboxRule",
+      data: {
+        ruleId: "Identity",
+        userPrincipalName: graphUserRequest.data?.[0]?.userPrincipalName,
+        ruleName: "Name",
+        Disable: true,
+      },
+      condition: (row) => row.Enabled,
+      confirmText: "Are you sure you want to disable this mailbox rule?",
+      multiPost: false,
+    },
+    {
       label: "Remove Mailbox Rule",
       type: "POST",
-      icon: <TrashIcon />,
+      icon: <DeleteForever />,
       url: "/api/ExecRemoveMailboxRule",
       data: {
         ruleId: "Identity",
